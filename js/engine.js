@@ -33,6 +33,7 @@ var Engine = (function(global) {
      * and handles properly calling the update and render methods.
      */
     function main() {
+
         /* Get our time delta information which is required if your game
          * requires smooth animation. Because everyone's computer processes
          * instructions at different speeds we need a constant value that
@@ -57,6 +58,7 @@ var Engine = (function(global) {
          * function again as soon as the browser is able to draw another frame.
          */
         win.requestAnimationFrame(main);
+
     }
 
     /* This function does some initial setup that should only occur once,
@@ -80,21 +82,72 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
-    /* This is called by the update function and loops through all of the
+    /* This function will detect collisions between player and enemies.
+     * It will create a rectangle around the player, and another rectangle
+     * around each enemy.  If the players left or right x-position are within
+     * the left or right x postion of an enemy, then continue checking. If the
+     * player's top or bottom y position fall within the y-boundary of an enemy,
+     * then we have a collision.  Reset the player.
+     */
+    function checkCollisions() {
+        allEnemies.forEach(function(enemy) {
+
+          // this simulates a boundary rectangle around the enemy
+          // (1) get the left and right x-boundary of the enemy
+          // (2) get top and bottom y-boundary of the enemy
+          var eLeftX   = enemy.x;
+          var eRightX  = enemy.x + enemy.width;
+          var eTopY    = enemy.y + enemy.height;
+          var eBottomY = eTopY + enemy.Yoff;
+
+          // repeat for the player
+          var pLeftX   = player.x;
+          var pRightX  = player.x + player.width;
+          var pTopY    = player.y + player.height;
+          var pBottomY = pTopY + player.Yoff;
+
+          var flag = 0;
+
+          // Check to see if enemy x-boundaries surround the left or
+          // right x-boundary of the player.
+          if ((eLeftX < pLeftX) && (pLeftX < eRightX)) {
+            flag = 1;
+          }
+          else if ((eLeftX < pRightX) && (pRightX < eRightX)) {
+            flag = 1;
+          }
+
+          // If player fell within x-boundary of an enemy, then check
+          // to see if player falls within y-boundary of an enemy.  If
+          // so then reset player.
+          if (flag > 0) {
+            if((eTopY < pTopY) && ( pTopY < eBottomY)) {
+              player.reset();
+            }
+            else if((eTopY < pBottomY) && ( pBottomY < eBottomY)) {
+              player.reset();
+            }
+          }
+        });
+    }
+
+    /* This is called by the update function  and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
      * their update() methods. It will then call the update function for your
      * player object. These update methods should focus purely on updating
-     * the data/properties related to the object. Do your drawing in your
+     * the data/properties related to  the object. Do your drawing in your
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
-        player.update();
+        if (gameState == states.RUNNING){  // only update enemies when game is running
+          allEnemies.forEach(function(enemy) {
+              enemy.update(dt);
+          });
+          player.update();
+        }
     }
 
     /* This function initially draws the "game level", it will then call
@@ -107,6 +160,7 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
+
         var rowImages = [
                 'images/water-block.png',   // Top row is water
                 'images/stone-block.png',   // Row 1 of 3 of stone
@@ -136,11 +190,12 @@ var Engine = (function(global) {
             }
         }
 
+
         renderEntities();
     }
 
     /* This function is called by the render function and is called on each game
-     * tick. Its purpose is to then call the render functions you have defined
+     * tick. It's purpose is to then call the render functions you have defined
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
@@ -150,7 +205,6 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
         player.render();
     }
 
@@ -176,7 +230,7 @@ var Engine = (function(global) {
     Resources.onReady(init);
 
     /* Assign the canvas' context object to the global variable (the window
-     * object when run in a browser) so that developers can use it more easily
+     * object when run in a browser) so that developer's can use it more easily
      * from within their app.js files.
      */
     global.ctx = ctx;
