@@ -33,7 +33,7 @@ function startGame() {
   document.getElementById("pauseButton").disabled = false;
   var msg = "Game started.  ";
   msg += "<span style='font-size:x-small;'>";
-  msg += "<br>On some browsers you will need to click on the grid to set focus</span>";
+
   document.getElementById("messages1").innerHTML = msg;
   document.getElementById("messages2").innerHTML = "";
 }
@@ -266,7 +266,7 @@ Player.prototype.handleInput = function(direction) {
 //////////////////////////////////////////////////////////////////////
 // Now instantiate your objects.                                    //
 //Place all enemy objects in an array called allEnemies             //
-//Place the player object in a variable called player               //                                                   //
+//Place the player object in a variable called player               //
 //////////////////////////////////////////////////////////////////////
 
 allEnemies = [];
