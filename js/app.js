@@ -46,6 +46,7 @@ function resetGame() {
   pauseGame();
 }
 
+
 /////////////////////////////////////////////////////////////
 //                                                         //
 // Enemies to be avoided by the players.                   //
