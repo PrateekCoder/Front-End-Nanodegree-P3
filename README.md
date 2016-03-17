@@ -14,3 +14,6 @@ In this game you have a Player and Enemies (Bugs). The goal of the player is to 
 1. The controls for the game are pretty simple, you can use the up, down, right and left buttons on your keyboard to move your player.
 2. You can use the buttons at the bottom of the game to pause and reset the game at any moment.
 3. You need to avoid the enemies and reach the water across the road. Your points keeps on increasing by 100 everytime you reach the water successfully.
+
+##Snap Of the Game:
+![alt](http://s22.postimg.org/7dql6qaht/snap.png)
